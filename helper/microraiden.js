@@ -4,19 +4,19 @@ const EthereumTx = require('ethereumjs-tx');
 const fs = require('fs-extra');
 
 const web3 = new Web3("http://52.8.233.242:8545");
+var contractABI = [],
+    tokenABI = [],
+    tokenAddr = "0x74434527b8e6c8296506d61d0faf3d18c9e4649a",
+    contractAddr = "0xff24d15afb9eb080c089053be99881dd18aa1090";
 
 var MicroRaiden = {
     web3: web3,
     ethUtil: EthSigUtil,
     contract: null,
-    getAccounts: function () {
-        fs.readFile(__dirname + '/../contracts/build/Journal.abi', function (err, file_data) {
-            if (err) {
-                console.log(err);
-                return;
-            }
-            jContract = new web3.eth.Contract(JSON.parse(file_data.toString()), config.contract);
-        });
+    token: null,
+    getContracts: function () {
+        this.contract = web3.eth.Contract(contractABI, contractAddr);
+        this.token = web3.eth.Contract(tokenABI, tokenAddr);
     },
     onInstall: function (address, account, count, callback) {
         var transfer = MicroRaiden.methods.onInstall(address);
