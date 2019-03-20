@@ -1,7 +1,7 @@
 var MicroRaiden = require('./microraiden')
 var WebSocketServer = require('websocket').server, wsServer;
 
-MicroRaiden.accounts();
+MicroRaiden.getAccounts();
 
 var SocketServer = {
     init: function (server) {
