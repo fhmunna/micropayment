@@ -9,6 +9,13 @@ var contractABI = [],
     tokenAddr = "0x74434527b8e6c8296506d61d0faf3d18c9e4649a",
     contractAddr = "0xff24d15afb9eb080c089053be99881dd18aa1090";
 
+var config = {
+    gas: null,
+    gasPrice: null,
+    gasLimit: null,
+    chainId: null,
+}
+
 var MicroRaiden = {
     web3: web3,
     ethUtil: EthSigUtil,
@@ -18,8 +25,8 @@ var MicroRaiden = {
         this.contract = web3.eth.Contract(contractABI, contractAddr);
         this.token = web3.eth.Contract(tokenABI, tokenAddr);
     },
-    onInstall: function (privKey, address, account, count, callback) {
-        var transfer = MicroRaiden.methods.onInstall(address);
+    closeChannel: function (privKey, address, account, count, callback) {
+        var transfer = this.contract.closeCoperatively(address);
         var encodedABI = transfer.encodeABI();
 
         const privateKey = Buffer.from(privKey, 'hex');
