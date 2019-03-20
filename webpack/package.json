@@ -1,0 +1,17 @@
+{
+  "name": "web3-webpack-starter",
+  "version": "0.0.1",
+  "scripts": {
+    "build": "webpack --config ./webpack.config.js  --mode development --output ./dist/main.js",
+    "build:prod": "webpack --config ./webpack.config.js  --mode production --output ./dist/main.js"
+  },
+  "dependencies": {
+    "web3": "1.0.0-beta.49"
+  },
+  "devDependencies": {
+    "bn.js": "^4.11.8",
+    "lodash": "^4.17.11",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.0"
+  }
+}
