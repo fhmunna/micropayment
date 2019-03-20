@@ -47,4 +47,4 @@ var socketserver = {
     }
 }
 
-module.exports = socketserver
+module.exports = socketserver;
