@@ -1,6 +1,7 @@
+var MicroRaiden = require('./microraiden')
 var WebSocketServer = require('websocket').server, wsServer;
 
-var socketserver = {
+var SocketServer = {
     init: function (server) {
         wsServer = new WebSocketServer({
             httpServer: server,
@@ -13,7 +14,7 @@ var socketserver = {
         });
 
         wsServer.on('request', function (request) {
-            if (!socketserver.originIsAllowed(request.origin)) {
+            if (!SocketServer.originIsAllowed(request.origin)) {
                 // Make sure we only accept requests from an allowed origin
                 request.reject();
                 console.log((new Date()) + ' Connection from origin ' + request.origin + ' rejected.');
@@ -23,7 +24,7 @@ var socketserver = {
             var connection = request.accept('echo-protocol', request.origin);
             console.log((new Date()) + ' Connection accepted.');
             connection.on('message', function (message) {
-                socketserver.on_message(connection, message)
+                SocketServer.on_message(connection, message)
             });
             connection.on('close', function (reasonCode, description) {
                 console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
@@ -47,4 +48,4 @@ var socketserver = {
     }
 }
 
-module.exports = socketserver;
+module.exports = SocketServer;
