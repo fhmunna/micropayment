@@ -18,11 +18,11 @@ var MicroRaiden = {
         this.contract = web3.eth.Contract(contractABI, contractAddr);
         this.token = web3.eth.Contract(tokenABI, tokenAddr);
     },
-    onInstall: function (address, account, count, callback) {
+    onInstall: function (privKey, address, account, count, callback) {
         var transfer = MicroRaiden.methods.onInstall(address);
         var encodedABI = transfer.encodeABI();
 
-        const privateKey = Buffer.from(config.privKey, 'hex');
+        const privateKey = Buffer.from(privKey, 'hex');
 
         const txParams = {
             from: account.toLowerCase(),
@@ -43,8 +43,7 @@ var MicroRaiden = {
         web3.eth.sendSignedTransaction(signedTx, function (err, result) {
             if (err) {
                 callback({status: 401, data: err.message});
-            }
-            else {
+            } else {
                 callback({status: 200, data: result});
             }
         });
