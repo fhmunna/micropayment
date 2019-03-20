@@ -9,7 +9,7 @@ var MicroRaiden = {
     getAccounts: function () {
         return web3.eth.getAccounts().then(console.log);
     }
-}
+};
 
 module.exports = MicroRaiden;
 
