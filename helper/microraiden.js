@@ -3,7 +3,8 @@ const EthSigUtil = require('eth-sig-util');
 const EthereumTx = require('ethereumjs-tx');
 const fs = require('fs-extra');
 
-const web3 = new Web3("http://52.8.233.242:8545");
+const web3 = new Web3(new Web3.providers.HttpProvider("http://52.8.233.242:8545"));
+// const web3 = new Web3("https://ropsten.infura.io/e34106c3ca954f9dbacb790b39474dda");
 const contractABI = JSON.parse(fs.readFileSync(__dirname + '/../contracts/contracts.json').toString());
 
 const TOKEN = 'CustomToken';
@@ -11,8 +12,8 @@ const CHANNEL_MANAGER = 'RaidenMicroTransferChannels';
 const TOKEN_SUPLY = 1e25;
 const DECIMALS = 18;
 const CHALLENGE_PERIOD = 500;
-const tokenAddr = "0x74434527b8e6c8296506d61d0faf3d18c9e4649a";
-const channelAddr = "0xff24d15afb9eb080c089053be99881dd18aa1090";
+const tokenAddr = EthSigUtil.normalize("0x74434527b8e6c8296506d61d0faf3d18c9e4649a");
+const channelAddr = EthSigUtil.normalize("0xff24d15afb9eb080c089053be99881dd18aa1090");
 
 var config = {
     gas: null,
@@ -24,32 +25,26 @@ var config = {
 var MicroRaiden = {
     web3: web3,
     ethUtil: EthSigUtil,
-    channel: null,
     token: null,
+    contract: null,
     getContracts: function () {
-        this.channel = web3.eth.Contract(contractABI[CHANNEL_MANAGER].abi, channelAddr);
-        this.token = web3.eth.Contract(contractABI[TOKEN].abi, tokenAddr);
+        this.token = web3.eth.contract(contractABI[TOKEN].abi).at(tokenAddr);
+        this.contract = web3.eth.contract(contractABI[CHANNEL_MANAGER].abi).at(channelAddr);
     },
     getBalance: function () {
-        web3.eth.getAccounts().then(function (accounts) {
-            var sender_address = '0x18c8bA8eA6Ba89AA3e4a329CF752E71cBA061025';
-            MicroRaiden.token.methods.balanceOf(sender_address).call((error, result) => {
-                console.log(error);
-            }).then((result) => {
-                console.log(result);
-            });
+        var sender = EthSigUtil.normalize('0x18c8bA8eA6Ba89AA3e4a329CF752E71cBA061025'),
+            receiver = EthSigUtil.normalize('0xB9EB427911BAb56E8B7683cC3d82821B44d2c7cc');
+        MicroRaiden.token.balanceOf.call(sender, {from: receiver}, (error, result) => {
+            console.log(result.toNumber());
         });
     },
     getChannelInfo: function () {
-        web3.eth.getAccounts().then(function (accounts) {
-            var sender_address = EthSigUtil.normalize('0x18c8bA8eA6Ba89AA3e4a329CF752E71cBA061025'),
-                receiver_address = EthSigUtil.normalize(accounts[0]),
-                open_block_number = 5227362;
-            MicroRaiden.channel.methods.getKey(sender_address, receiver_address, open_block_number).call({from: receiver_address}, (error, result) => {
-                console.log(error);
-            }).then((result) => {
-                console.log(result);
-            });
+        var sender = EthSigUtil.normalize('0x18c8bA8eA6Ba89AA3e4a329CF752E71cBA061025'),
+            receiver = EthSigUtil.normalize('0xB9EB427911BAb56E8B7683cC3d82821B44d2c7cc'),
+            open_block_number = 5227540;
+        MicroRaiden.contract.getChannelInfo.call(sender, receiver, open_block_number, {from: receiver}, (error, result) => {
+            console.log(result);
+            // console.log(web3.fromWei(result[1].toNumber(), "ether" ) );
         });
     },
     closeChannel: function (privKey, address, account, count, callback) {
