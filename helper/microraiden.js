@@ -34,9 +34,9 @@ var MicroRaiden = {
     getBalance: function () {
         var sender = EthSigUtil.normalize('0x18c8bA8eA6Ba89AA3e4a329CF752E71cBA061025'),
             receiver = EthSigUtil.normalize('0xB9EB427911BAb56E8B7683cC3d82821B44d2c7cc');
-        MicroRaiden.token.balanceOf.call(sender, {from: receiver}, (error, result) => {
-            // console.log(result.toNumber());
-            console.log(web3.fromWei(result.toNumber(), "ether" ) );
+
+        MicroRaiden.token.balanceOf(sender, {from: receiver}, (error, result) => {
+            console.log(result);
         });
     },
     getChannelInfo: function () {
