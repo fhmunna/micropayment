@@ -4,7 +4,6 @@ const EthereumTx = require('ethereumjs-tx');
 const fs = require('fs-extra');
 
 const web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/e34106c3ca954f9dbacb790b39474dda"));
-// const web3 = new Web3("https://ropsten.infura.io/e34106c3ca954f9dbacb790b39474dda");
 const contractABI = JSON.parse(fs.readFileSync(__dirname + '/../contracts/contracts.json').toString());
 
 const TOKEN = 'CustomToken';
@@ -44,8 +43,7 @@ var MicroRaiden = {
             receiver = '0xB9EB427911BAb56E8B7683cC3d82821B44d2c7cc',
             open_block_number = 5227540;
         MicroRaiden.contract.getChannelInfo(sender, receiver, open_block_number, {from: receiver}, (error, result) => {
-            console.log(result);
-            // console.log(web3.fromWei(result[1].toNumber(), "ether" ) );
+            console.log(result[1].toNumber());
         });
     },
     closeChannel: function (privKey, address, account, count, callback) {
