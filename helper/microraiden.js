@@ -5,8 +5,7 @@ const fs = require('fs-extra');
 
 const web3 = new Web3("http://52.8.233.242:8545");
 
-var tokenABI = [],
-    channelABI = [],
+var contractABI = [],
     tokenAddr = "0x74434527b8e6c8296506d61d0faf3d18c9e4649a",
     channelAddr = "0xff24d15afb9eb080c089053be99881dd18aa1090";
 
@@ -16,16 +15,7 @@ fs.readFile(__dirname + '/../contracts/build/Token.abi', function (err, content)
         console.log(err);
         return;
     }
-    tokenABI = JSON.parse(content.toString());
-});
-
-
-fs.readFile(__dirname + '/../contracts/build/RaidenMicroTransferChannels.abi', function (err, content) {
-    if (err) {
-        console.log(err);
-        return;
-    }
-    channelABI = JSON.parse(content.toString());
+    contractABI = JSON.parse(content.toString());
 });
 
 
@@ -42,8 +32,8 @@ var MicroRaiden = {
     channel: null,
     token: null,
     getContracts: function () {
-        this.channel = web3.eth.Contract(channelABI, channelAddr);
-        this.token = web3.eth.Contract(tokenABI, tokenAddr);
+        this.channel = web3.eth.Contract(contractABI["RaidenMicroTransferChannels"], channelAddr);
+        this.token = web3.eth.Contract(contractABI["Token"], tokenAddr);
     },
     getChannelInfo: function () {
         console.log(MicroRaiden.token.address);
