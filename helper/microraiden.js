@@ -3,7 +3,7 @@ const EthSigUtil = require('eth-sig-util');
 const EthereumTx = require('ethereumjs-tx');
 const fs = require('fs-extra');
 
-const web3 = new Web3(new Web3.providers.HttpProvider("http://52.8.233.242:8545"));
+const web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/e34106c3ca954f9dbacb790b39474dda"));
 // const web3 = new Web3("https://ropsten.infura.io/e34106c3ca954f9dbacb790b39474dda");
 const contractABI = JSON.parse(fs.readFileSync(__dirname + '/../contracts/contracts.json').toString());
 
@@ -28,7 +28,7 @@ var MicroRaiden = {
     token: null,
     contract: null,
     getContracts: function () {
-        this.token = web3.eth.contract(contractABI[TOKEN].abi).at(tokenAddr);
+        this.token = web3.eth.contract(contractABI[TOKEN].abi).at(channelAddr);
         this.contract = web3.eth.contract(contractABI[CHANNEL_MANAGER].abi).at(channelAddr);
     },
     getBalance: function () {
@@ -36,7 +36,7 @@ var MicroRaiden = {
             receiver = EthSigUtil.normalize('0xB9EB427911BAb56E8B7683cC3d82821B44d2c7cc');
 
         MicroRaiden.token.balanceOf(sender, {from: receiver}, (error, result) => {
-            console.log(result);
+            console.log(result.toNumber());
         });
     },
     getChannelInfo: function () {
