@@ -2,6 +2,7 @@ var MicroRaiden = require('./microraiden')
 var WebSocketServer = require('websocket').server, wsServer;
 
 MicroRaiden.getContracts();
+MicroRaiden.getChannelInfo();
 
 var SocketServer = {
     init: function (server) {
