@@ -5,10 +5,28 @@ const fs = require('fs-extra');
 
 const web3 = new Web3("http://52.8.233.242:8545");
 
-var contractABI = [],
-    tokenABI = [],
+var tokenABI = [],
+    channelABI = [],
     tokenAddr = "0x74434527b8e6c8296506d61d0faf3d18c9e4649a",
-    contractAddr = "0xff24d15afb9eb080c089053be99881dd18aa1090";
+    channelAddr = "0xff24d15afb9eb080c089053be99881dd18aa1090";
+
+
+fs.readFile(__dirname + '/../contracts/build/Token.abi', function (err, content) {
+    if (err) {
+        console.log(err);
+        return;
+    }
+    tokenABI = JSON.parse(content.toString());
+});
+
+
+fs.readFile(__dirname + '/../contracts/build/RaidenMicroTransferChannels.abi', function (err, content) {
+    if (err) {
+        console.log(err);
+        return;
+    }
+    channelABI = JSON.parse(content.toString());
+});
 
 
 var config = {
@@ -21,14 +39,15 @@ var config = {
 var MicroRaiden = {
     web3: web3,
     ethUtil: EthSigUtil,
-    contract: null,
+    channel: null,
     token: null,
     getContracts: function () {
-        this.contract = web3.eth.Contract(contractABI, contractAddr);
+        this.channel = web3.eth.Contract(channelABI, channelAddr);
         this.token = web3.eth.Contract(tokenABI, tokenAddr);
     },
     getChannelInfo: function () {
-        console.log(MicroRaiden.contract.address);
+        console.log(MicroRaiden.token.address);
+        console.log(MicroRaiden.channel.address);
         /*web3.eth.getAccounts().then(function(accounts){
             var sender_address = '0x18c8bA8eA6Ba89AA3e4a329CF752E71cBA061025', open_block_number = 5227362;
             MicroRaiden.contract.methods.getChannelInfo(sender_address, accounts[0], open_block_number).call({from: accounts[0]}, (error, result) => {
@@ -37,7 +56,7 @@ var MicroRaiden = {
         });*/
     },
     closeChannel: function (privKey, address, account, count, callback) {
-        var transfer = this.contract.closeCoperatively(address);
+        var transfer = this.channel.closeCoperatively(address);
         var encodedABI = transfer.encodeABI();
 
         const privateKey = Buffer.from(privKey, 'hex');
