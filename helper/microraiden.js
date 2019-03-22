@@ -4,7 +4,7 @@ const EthereumTx = require('ethereumjs-tx');
 const fs = require('fs-extra');
 
 const web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/e34106c3ca954f9dbacb790b39474dda"));
-const contractABI = JSON.parse(fs.readFileSync(__dirname + '/../contracts/contracts.json').toString());
+const contractABI = JSON.parse(fs.readFileSync(__dirname + '/../public/contracts.json').toString());
 
 const TOKEN = 'CustomToken';
 const CHANNEL_MANAGER = 'RaidenMicroTransferChannels';

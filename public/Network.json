@@ -1,0 +1,12 @@
+{
+  "default": "ropsten",
+  "ropsten": {
+    "abi": "/contracts.json",
+    "contractAddress": "0xff24d15afb9eb080c089053be99881dd18aa1090",
+    "httpProvider": "https://ropsten.infura.io/e34106c3ca954f9dbacb790b39474dda",
+    "gas": 4712388,
+    "gasPrice": 65000000000,
+    "gasLimit": 4712388,
+    "chainId": 3
+  }
+}
